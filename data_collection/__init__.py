@@ -1,0 +1,1 @@
+from data_collection.data_collection import extract_content_as_json
