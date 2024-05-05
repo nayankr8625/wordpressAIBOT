@@ -1,1 +1,1 @@
-from data_collection.data_collection import extract_content_as_json
+from data_collection.data_collection import extract_content_as_json, fetch_latest_posts

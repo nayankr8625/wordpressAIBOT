@@ -6,6 +6,7 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.schema import Document
 from langchain.retrievers.merger_retriever import MergerRetriever
+from langchain.text_splitter import RecursiveCharacterTextSplitter
  # Assuming this function is in a separate file
 
 # Constants
@@ -25,6 +26,18 @@ def clean_title(title:str):
         return cleaned_title
     else:
         return title
+    
+def split_in_doc(text):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500,
+        chunk_overlap=20
+    )
+    chunks = text_splitter.split_text(text)
+
+
+    # Convert chunks into Document objects
+    documents = [Document(page_content=chunk) for chunk in chunks]
+    return documents
 
 
 # Function to create or load FAISS indexes for WordPress posts
@@ -34,24 +47,26 @@ def create_faiss_indexes(post_data):
     for index, post in enumerate(post_data):
         post_title = clean_title(post["title"]).replace(" ", "_")  # Create a safe filename
         index_path = os.path.join(INDEX_STORE_DIR, f"{post_title}")
+        document = split_in_doc(post["content"])
+        print(document)
         
         if os.path.exists(index_path):
             print("Vector Stores already exist for this post")
         else:
             # Create a new index
-            document = Document(
-                page_content=post["content"],
-                metadata={
-                    "title": post["title"],
-                    "short_url": post["short_url"]
-                }
-            )
-            vector_store = FAISS.from_documents([document], embeddings) 
+            document.append(Document(page_content="End of Post",
+                              metadata={
+                                "title": post["title"],
+                                "short_url": post["short_url"],
+                                "date":post["date"],
+                                "date_modified":post["date_modified"]
+                              }))
+            vector_store = FAISS.from_documents(document, embeddings) 
             vector_store.save_local(index_path)
             print(f"Created new index for '{post['title']}'")
 
 
-def merge_vector_stores(vector_store_root_dir="vector_store_"):
+def merge_vector_stores(vector_store_root_dir=INDEX_STORE_DIR):
     index_files = [f for f in os.listdir(vector_store_root_dir)]
 
     # Check the full path of each file
