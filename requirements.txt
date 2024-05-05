@@ -1,0 +1,8 @@
+beautifulsoup4
+html2text
+pandas
+numpy
+langchain
+langchain-groq
+faiss-cpu
+chromadb
