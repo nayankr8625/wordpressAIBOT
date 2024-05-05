@@ -1,10 +1,11 @@
 from bs4 import BeautifulSoup
+import pandas as pd
 import requests
 import time
 
-# Set the base URL for your WordPress site
-WORDPRESS_DOMAIN = "portfo336.wordpress.com"
-BASE_URL = f"https://public-api.wordpress.com/rest/v1.1/sites/{WORDPRESS_DOMAIN}/posts"
+# # Set the base URL for your WordPress site
+# WORDPRESS_DOMAIN = "portfo336.wordpress.com"
+# BASE_URL = f"https://public-api.wordpress.com/rest/v1.1/sites/{WORDPRESS_DOMAIN}/posts"
 
 # Function to fetch the latest posts
 def fetch_latest_posts(url, limit=5):
@@ -24,7 +25,8 @@ def clean_content(content:str):
     # Printing the cleaned text
     return plain_text
 
-def extract_content_as_json():
+def extract_content_as_json(wordpress_domain):
+    BASE_URL = f"https://public-api.wordpress.com/rest/v1.1/sites/{wordpress_domain}/posts"
     all_posts = fetch_latest_posts(url=BASE_URL)
     posts_json = []  # List of dictionaries to store post information
     
@@ -34,6 +36,8 @@ def extract_content_as_json():
             "title": post["title"],
             "content": clean_content(post["content"]),
             "short_url": post["short_URL"],
+            "date":pd.to_datetime(post["date"]),
+            "date_modified":pd.to_datetime(post["modified"])
         }
         # Add the dictionary to the list of posts
         posts_json.append(post_dict)
