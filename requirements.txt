@@ -7,3 +7,4 @@ langchain-groq
 faiss-cpu
 chromadb
 streamlit
+langchain-community

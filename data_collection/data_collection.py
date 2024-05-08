@@ -34,6 +34,7 @@ def extract_content_as_json(wordpress_domain):
         # Create a dictionary for each post
         post_dict = {
             "title": post["title"],
+            "user_name":post["author"]["name"],
             "content": clean_content(post["content"]),
             "short_url": post["short_URL"],
             "date":pd.to_datetime(post["date"]),

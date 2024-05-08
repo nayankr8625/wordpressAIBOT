@@ -7,7 +7,7 @@ from template import css, bot_template, user_template
 
 def handle_userinput(user_question):
     # Query the conversation chain with the user's question
-    response = st.session_state.conversation({"question": user_question})
+    response = st.session_state.conversation.invoke(user_question)
     # Update the chat history in the session state
     st.session_state.chat_history = response["chat_history"]
 

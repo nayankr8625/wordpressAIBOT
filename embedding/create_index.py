@@ -48,13 +48,18 @@ def create_faiss_indexes(post_data):
         post_title = clean_title(post["title"]).replace(" ", "_")  # Create a safe filename
         index_path = os.path.join(INDEX_STORE_DIR, f"{post_title}")
         document = split_in_doc(post["content"])
-        print(document)
+        var_metadata = f"""
+        This is a wordpress post which was posted by {post["user_name"]} on the topic {post["title"]}.
+        You Can View this Post by clicking on the link given below.
+        {post["short_url"]}
+        This Post was posted on date {post["date"]} and last modified on {post["date_modified"]}.
+        """
         
         if os.path.exists(index_path):
             print("Vector Stores already exist for this post")
         else:
             # Create a new index
-            document.append(Document(page_content="End of Post",
+            document.append(Document(page_content=var_metadata,
                               metadata={
                                 "title": post["title"],
                                 "short_url": post["short_url"],
