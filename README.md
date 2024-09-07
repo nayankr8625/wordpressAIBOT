@@ -42,6 +42,3 @@ Contributions to this project are welcome! If you're interested in contributing,
 2. Create a feature branch for your changes.
 3. Submit a pull request with a detailed explanation of your changes.
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
-``markdown```
