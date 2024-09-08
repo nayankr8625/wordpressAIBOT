@@ -2,8 +2,8 @@ import os
 import json
 import faiss
 import numpy as np
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.schema import Document
 from langchain.retrievers.merger_retriever import MergerRetriever
 from langchain.text_splitter import RecursiveCharacterTextSplitter
